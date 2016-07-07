@@ -1,0 +1,251 @@
+<!-- #########################################
+                  SOPHOS
+     #########################################-->
+
+<!-- HTTP PROXY -->
+<decoder name="httpproxy">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ httpproxy[\d+]:</prematch>
+</decoder>
+
+<decoder name="httpproxy_child_1">
+  <parent>httpproxy</parent>
+  <regex offset="after_parent"> id="\d+" severity="\w+" sys="\w+" sub="\w+" name="\.+" action="(\w+)" method="\w+" srcip="(\S+)" dstip="(\S*)"</regex>
+  <order>url,action,srcip,dstip</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- REVERSE PROXY -->
+<decoder name="reverseproxy">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ reverseproxy:</prematch>
+</decoder>
+
+<decoder name="reverseproxy_child_1">
+  <parent>reverseproxy</parent>
+  <prematch offset="after_parent">^ [\.+] [proxy_http:</prematch>
+  <regex offset="after_prematch">(\w+)] \.+ [client (\S+):(\d+)]</regex>
+  <order>status,srcip,srcport</order>
+</decoder>
+
+<decoder name="reverseproxy_child_2">
+  <parent>reverseproxy</parent>
+  <prematch offset="after_parent">^ [\.+] [proxy:</prematch>
+  <regex offset="after_prematch">(\w+)] \.+ [client (\S+):(\d+)]</regex>
+  <order>status,srcip,srcport</order>
+</decoder>
+
+<decoder name="reverseproxy_child_3">
+  <parent>reverseproxy</parent>
+  <prematch offset="after_parent">^ id="\d+" srcip="</prematch>
+  <regex offset="after_prematch">(\S+)" localip="(\S*)" size="\d+" user="(\w+)"</regex>
+  <order>srcip,dstip,user</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- EXIM-IN -->
+<decoder name="exim_in">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ exim-in[\d+]:</prematch>
+</decoder>
+
+<decoder name="exim_in_child_1">
+  <parent>exim_in</parent>
+  <prematch offset="after_parent">^ \S+ </prematch>
+  <regex offset="after_prematch">(ctasd reports '\w+')</regex>
+  <order>status</order>
+</decoder>
+
+<decoder name="exim_in_child_2">
+  <parent>exim_in</parent>
+  <prematch offset="after_parent">^ [\.+] [proxy:</prematch>
+  <regex offset="after_prematch">(\w+)]</regex>
+  <order>status</order>
+</decoder>
+
+<decoder name="exim_in_child_3">
+  <parent>exim_in</parent>
+  <prematch offset="after_parent">^ id="\d+" srcip="</prematch>
+  <regex offset="after_prematch">(\S+)" localip="(\S*)" size="\d+" user="(\w+)"</regex>
+  <order>srcip,dstip,user</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- EXIM-OUT -->
+<decoder name="exim_out">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ exim-out[\d+]:</prematch>
+</decoder>
+
+<decoder name="exim_out_child_1">
+  <parent>exim_out</parent>
+  <prematch offset="after_parent">^ \d\d\d\d-\d\d-\d\d</prematch>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- ULOGD -->
+<decoder name="ulogd">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ ulogd[\d+]:</prematch>
+</decoder>
+
+<decoder name="ulogd_child_1">
+  <parent>ulogd</parent>
+  <prematch offset="after_parent">^ id="\d+" severity="\w+" sys="\w+" sub="\w+ name="\.+" action="</prematch>
+  <regex offset="after_prematch">(\w+)" fwrule="\d+" initf="\w+" srcmac="\S+" dstmac="\S*" srcip="(\S+)" dstip="(\S*)"</regex>
+  <order>action,srcip,dstip</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- SMTPD -->
+<decoder name="smtpd">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ smtpd[\d+]:</prematch>
+</decoder>
+
+<decoder name="smtpd_child_1">
+  <parent>smtpd</parent>
+  <prematch offset="after_parent">^ QMGR[\d+]: \.+</prematch>
+</decoder>
+
+<decoder name="smtpd_child_2">
+  <parent>smtpd</parent>
+  <prematch offset="after_parent">^ SCANNER[\d+]: \S+ \<= </prematch>
+  <regex offset="after_prematch">(\S+) \.+ P=(\w+)</regex>
+  <order>user,action</order>
+</decoder>
+
+<decoder name="smtpd_child_3">
+  <parent>smtpd</parent>
+  <prematch offset="after_parent">^ SCANNER[\d+]: id="\d+" severity="\w+" sys="\w+" sub="\w+" name="\.+" srcip="</prematch>
+  <regex offset="after_prematch">(\S+)" from="(\S+)" to="(\S+)"</regex>
+  <order>srcip,srcuser,dstuser</order>
+</decoder>
+
+<decoder name="smtpd_child_4">
+  <parent>smtpd</parent>
+  <prematch offset="after_parent">^ SCANNER[\d+]: id="\d+" severity="\w+" sys="\w+" sub="\w+" name="\.+" srcip="</prematch>
+  <regex offset="after_prematch">(\S+)" from="(\S+)" to="(\S+)"</regex>
+  <order>srcip,srcuser,dstuser</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- AUA -->
+<decoder name="aua">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ aua[\d+]:</prematch>
+</decoder>
+
+<decoder name="aua_child_2">
+  <parent>aua</parent>
+  <prematch offset="after_parent">^ id="\d+" severity="\w+" sys="\w+" sub="\w+" name="</prematch>
+  <regex offset="after_prematch">(\.+)"</regex>
+  <order>action</order>
+</decoder>
+
+<decoder name="aua_child_1">
+  <parent>aua</parent>
+  <prematch offset="after_parent">^ id="\d+" severity="\w+" sys="\w+" sub="\w+" name="</prematch>
+  <regex offset="after_prematch">(\.+)" srcip="(\S+)" host="\.*" user="(\.+)"</regex>
+  <order>action,srcip,user</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- RSA SECURID -->
+<decoder name="rsa_securid">
+ <prematch>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d,\d+, ,</prematch>
+</decoder>
+
+<decoder name="rsa_securid_child_1">
+ <parent>rsa_securid</parent>
+ <prematch offset="after_parent">^ audit.runtime.com.rsa.ims.authn.impl.AuthenticationBrokerImpl,|^audit.runtime.com.rsa.authmgr.internal.authmethod.impl.SecurIDAuthenticationMethod, </prematch>
+ <regex offset="after_parent">\S+, \w+, \w+,\w+,(\d+.\d+.\d+.\d+),(\d+.\d+.\d+.\d+),(\w+),(\d+),(\w+),(\w+),\S+,\S+,\S+,\S+,(\w+),</regex>
+ <order>dstip,srcip,url,id,action,status,srcuser</order>
+</decoder>
+
+<decoder name="rsa_securid_child_2">
+ <parent>rsa_securid</parent>
+ <prematch offset="after_parent">^ system.com.rsa.ims.license.impl.LicenseServiceImpl, </prematch>
+ <regex offset="after_parent">\S+, WARN, \w+,\w+,,(\d+.\d+.\d+.\d+),(\w+),(\d+),(\w+),</regex>
+ <order>srcip,url,id,action</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- CLUSTER SNYC -->
+<decoder name="cluster_sync">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ cluster_sync[\d+]:</prematch>
+</decoder>
+
+<decoder name="cluster_sync_child_1">
+ <parent>cluster_sync</parent>
+ <regex offset="after_parent">^ (\.*)</regex>
+ <order>action</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- LOGGER -->
+<decoder name="logger">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ logger:</prematch>
+</decoder>
+
+<decoder name="logger_child_1">
+ <parent>logger</parent>
+ <regex offset="after_parent">^ (\.*)</regex>
+ <order>action</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- LOGARCHIVER -->
+<decoder name="logarchiver">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ logarchiver[\d+]:</prematch>
+</decoder>
+
+<decoder name="logarchiver_child_1">
+ <parent>logarchiver</parent>
+ <regex offset="after_parent">^ \s*(\S+): (\.*)</regex>
+ <order>status,action</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- POSTGRES -->
+<decoder name="postgres">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ postgres[\d+]:</prematch>
+</decoder>
+
+<decoder name="postgres_child_1">
+  <parent>postgres</parent>
+  <regex offset="after_parent">(\.+)</regex>
+  <order>action</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- CRON -->
+<decoder name="cron">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ /usr/sbin/cron[\d+]:</prematch>
+</decoder>
+
+<decoder name="cron_child_1">
+  <parent>cron</parent>
+  <regex offset="after_parent">\s*\((\w+)\) CMD \((\.+)\)</regex>
+  <order>user,url</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- AUDLD -->
+<decoder name="audld">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ audld[\d+]:</prematch>
+</decoder>
+
+<decoder name="audld_child_1">
+  <parent>audld</parent>
+  <regex offset="after_parent">(\.*)</regex>
+  <order>action</order>
+</decoder>
+
+
