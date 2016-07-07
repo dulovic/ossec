@@ -248,4 +248,42 @@
   <order>action</order>
 </decoder>
 
+<!----------------------------------------------------------------------------------------------->
 
+<!-- AUISYS -->
+<decoder name="auisys">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ auisys[\d+]:</prematch>
+</decoder>
+
+<decoder name="auisys_child_1">
+  <parent>auisys</parent>
+  <regex offset="after_parent">(\.*)</regex>
+  <order>action</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- CSSD -->
+<decoder name="cssd">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ cssd[\d+]:</prematch>
+</decoder>
+
+<decoder name="cssd_child_1">
+  <parent>cssd</parent>
+  <regex offset="after_parent">(\.*)</regex>
+  <order>action</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+Jul  6 01:27:38 10.169.200.70 2016:07:06-01:27:40 sophos-dc-2 postfix/postfix-script[21703]: refreshing the Postfix mail system
+
+<!-- POSTFIX -->
+<decoder name="postfix">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ postfix/</prematch>
+</decoder>
+
+<decoder name="postfix_child_1">
+  <parent>postfix</parent>
+  <regex offset="after_parent">(\S+)[\d+]: (\.+)</regex>
+  <order>url,action</order>
+</decoder>
