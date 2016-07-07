@@ -275,7 +275,6 @@
 </decoder>
 
 <!----------------------------------------------------------------------------------------------->
-Jul  6 01:27:38 10.169.200.70 2016:07:06-01:27:40 sophos-dc-2 postfix/postfix-script[21703]: refreshing the Postfix mail system
 
 <!-- POSTFIX -->
 <decoder name="postfix">
