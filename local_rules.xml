@@ -157,7 +157,7 @@
 <!-- CSSD -->
 
 <group name="local,">
- <rule id="101400" level="0" noalert="1">
+ <rule id="101500" level="0" noalert="1">
   <decoded_as>cssd</decoded_as>
   <description>CSSD custom messages grouped.</description>
  </rule>
@@ -168,7 +168,7 @@
 <!-- POSTFIX -->
 
 <group name="local,">
- <rule id="101500" level="0" noalert="1">
+ <rule id="101600" level="0" noalert="1">
   <decoded_as>postfix</decoded_as>
   <description>POSTFIX custom messages grouped.</description>
  </rule>
