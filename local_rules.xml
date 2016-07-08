@@ -5,8 +5,34 @@
 <group name="sophos,">
  <rule id="100100" level="0" noalert="1">
   <decoded_as>rsa_securid</decoded_as>
-    <description>RSA custom messages grouped.</description>
+  <description>RSA custom messages grouped.</description>
  </rule>
+
+ <rule id="100101" level="0">
+  <if_sid>100100</if_sid>
+  <status>AUTHN_METHOD_SUCCESS</status>
+  <description>RSA SECUREID auth method success</description>
+ </rule>
+
+ <rule id="100102" level="0">
+  <if_sid>100100</if_sid>
+  <status>AUTHN_METHOD_FAILED</status>
+  <description>RSA SECUREID auth method failed</description>
+ </rule>
+
+ <rule id="100103" level="0">
+  <if_sid>100100</if_sid>
+  <url>AUTH_FAILED_BAD_TOKENCODE_GOOD_PIN</url>
+  <description>RSA SECUREID auth method failed</description>
+ </rule>
+
+ <rule id="100104" level="0">
+  <if_sid>100100</if_sid>
+  <url>FEATURE_LICENSE_CHECK</url>
+  <description>RSA SECUREID licence check</description>
+ </rule>
+
+
 </group>
 
 <!-------------------------------------------------------->
@@ -16,8 +42,21 @@
 <group name="sophos,">
  <rule id="100200" level="0" noalert="1">
   <decoded_as>httpproxy</decoded_as>
-    <description>HTTPPROXY custom messages grouped.</description>
+  <description>HTTPPROXY custom messages grouped.</description>
  </rule>
+
+ <rule id="100201" level="0">
+  <if_sid>100200</if_sid>
+  <action>pass</action>
+  <description>HTTPPROXY http access</description>
+ </rule>
+
+ <rule id="100202" level="0">
+  <if_sid>100200</if_sid>
+  <action>block</action>
+  <description>HTTPPROXY web request blocked</description>
+ </rule>
+ 
 </group>
 
 <!-------------------------------------------------------->
@@ -29,6 +68,19 @@
   <decoded_as>reverseproxy</decoded_as>
     <description>REVERSEPROXY custom messages grouped.</description>
  </rule>
+
+ <rule id="100301" level="0">
+  <if_sid>100300</if_sid>
+  <status>error</status>
+  <description>REVERSEPROXY error</description>
+ </rule>
+
+ <rule id="100302" level="0">
+  <if_sid>100300</if_sid>
+  <match>id="</match>
+  <description>REVERSEPROXY sucessful access</description>
+ </rule>
+
 </group>
 
 <!-------------------------------------------------------->
@@ -38,8 +90,14 @@
 <group name="sophos,">
  <rule id="100400" level="0" noalert="1">
   <decoded_as>exim_in</decoded_as>
-    <description>EXIM-IN custom messages grouped.</description>
+  <description>EXIM-IN custom messages grouped.</description>
  </rule>
+
+ <rule id="100401" level="0">
+  <if_sid>100400</if_sid>
+  <description>EXIM-IN event</description>
+ </rule>
+
 </group>
 
 <!-------------------------------------------------------->
@@ -51,6 +109,12 @@
   <decoded_as>exim_out</decoded_as>
     <description>EXIM-OUT custom messages grouped.</description>
  </rule>
+
+ <rule id="100501" level="0">
+  <if_sid>100500</if_sid>
+  <description>EXIM-OUT event</description>
+ </rule>
+
 </group>
 
 <!-------------------------------------------------------->
@@ -62,6 +126,13 @@
   <decoded_as>ulogd</decoded_as>
     <description>ULOGD custom messages grouped.</description>
  </rule>
+
+ <rule id="100601" level="0">
+  <if_sid>100600</if_sid>
+  <action>drop</action>
+  <description>ULOGD packet dropped</description>
+ </rule>
+
 </group>
 
 <!-------------------------------------------------------->
@@ -71,8 +142,146 @@
 <group name="sophos,">
  <rule id="100700" level="0" noalert="1">
   <decoded_as>smtpd</decoded_as>
-    <description>SMTPD custom messages grouped.</description>
+  
+ <rule id="100700" level="0" noalert="1">
+  <decoded_as>smtpd</decoded_as>
+  <description>SMTPD custom messages grouped.</description>
  </rule>
+
+ <rule id="100701" level="0">
+  <if_sid>100700</if_sid>
+  <match>QMGR</match>
+  <description>SMTPD QMGR event</description>
+ </rule>
+
+ <rule id="100702" level="0">
+  <if_sid>100700</if_sid>
+  <match>SCANNER</match>
+  <description>SMTPD SCANNER event</description>
+ </rule>
+ 
+</group>
+
+<!-------------------------------------------------------->
+
+<!-- LOGGER -->
+
+<group name="sophos,">
+ <rule id="101000" level="0" noalert="1">
+  <decoded_as>logger</decoded_as>
+  <description>LOGGER custom messages grouped.</description>
+ </rule>
+
+ <rule id="101001" level="0">
+  <if_sid>101000</if_sid>
+  <description>LOGGER event</description>
+ </rule>
+
+</group>
+
+<!-------------------------------------------------------->
+
+<!-- POSTGRES  -->
+
+<group name="sophos,">
+ <rule id="101100" level="0" noalert="1">
+  <decoded_as>postgres</decoded_as>
+  <description>POSTGRES  custom messages grouped.</description>
+ </rule>
+
+ <rule id="101101" level="0">
+  <if_sid>101100</if_sid>
+  <description>POSTGRES event</description>
+ </rule>
+
+</group>
+
+<!-------------------------------------------------------->
+
+<!-- CRON -->
+
+<group name="sophos,">
+ <rule id="101200" level="0" noalert="1">
+  <decoded_as>cron</decoded_as>
+  <description>CRON custom messages grouped.</description>
+ </rule>
+
+ <rule id="101201" level="0">
+  <if_sid>101200</if_sid>
+  <description>CRON event</description>
+ </rule>
+
+</group>
+
+<!-------------------------------------------------------->
+
+<!-- AUDLD -->
+
+<group name="sophos,">
+ <rule id="101300" level="0" noalert="1">
+  <decoded_as>audld</decoded_as>
+  <description>AUDLD custom messages grouped.</description>
+ </rule>
+
+ <rule id="101301" level="0">
+  <if_sid>101300</if_sid>
+  <description>AUDLD event</description>
+ </rule>
+
+</group>
+
+<!-------------------------------------------------------->
+
+<!-- AUISYS -->
+
+<group name="sophos,">
+ <rule id="101400" level="0" noalert="1">
+  <decoded_as>auisys</decoded_as>
+  <description>AUISYS custom messages grouped.</description>
+ </rule>
+
+ <rule id="101401" level="0">
+  <if_sid>101400</if_sid>
+  <description>AUISYS event</description>
+ </rule>
+
+</group>
+
+<!-------------------------------------------------------->
+
+<!-- CSSD -->
+
+<group name="sophos,">
+ <rule id="101500" level="0" noalert="1">
+  <decoded_as>cssd</decoded_as>
+  <description>CSSD custom messages grouped.</description>
+ </rule>
+
+ <rule id="101501" level="0">
+  <if_sid>101500</if_sid>
+  <description>CSSD event</description>
+ </rule>
+
+</group>
+
+<!-------------------------------------------------------->
+
+<!-- POSTFIX -->
+
+<group name="sophos,">
+ <rule id="101600" level="0" noalert="1">
+  <decoded_as>postfix</decoded_as>
+  <description>POSTFIX custom messages grouped.</description>
+ </rule>
+
+<rule id="101601" level="0">
+  <if_sid>101600</if_sid>
+  <description>POSTFIX event</description>
+ </rule>
+
+</group>
+
+
 </group>
 
 <!-------------------------------------------------------->
@@ -84,6 +293,18 @@
   <decoded_as>aua</decoded_as>
     <description>AUA custom messages grouped.</description>
  </rule>
+
+ <rule id="100801" level="0">
+  <if_sid>100800</if_sid>
+  <description>AUA event</description>
+ </rule>
+
+ <rule id="100802" level="0">
+  <if_sid>100800</if_sid>
+  <match>Terminating child</match>
+  <description>AUA terminating child</description>
+ </rule>
+
 </group>
 
 <!-------------------------------------------------------->
@@ -93,83 +314,12 @@
 <group name="sophos,">
  <rule id="100900" level="0" noalert="1">
   <decoded_as>cluster_sync</decoded_as>
-    <description>CLUSTER SNYC custom messages grouped.</description>
+  <description>CLUSTER SNYC custom messages grouped.</description>
  </rule>
-</group>
 
-<!-------------------------------------------------------->
-
-<!-- LOGGER -->
-
-<group name="sophos,">
- <rule id="101000" level="0" noalert="1">
-  <decoded_as>logger</decoded_as>
-    <description>LOGGER custom messages grouped.</description>
+ <rule id="100901" level="0">
+  <if_sid>100900</if_sid>
+  <description>CLUSTER SYNC event</description>
  </rule>
-</group>
 
-<!-------------------------------------------------------->
-
-<!-- POSTGRES  -->
-
-<group name="sophos,">
- <rule id="101100" level="0" noalert="1">
-  <decoded_as>postgres</decoded_as>
-    <description>POSTGRES  custom messages grouped.</description>
- </rule>
-</group>
-
-<!-------------------------------------------------------->
-
-<!-- CRON -->
-
-<group name="sophos,">
- <rule id="101200" level="0" noalert="1">
-  <decoded_as>cron</decoded_as>
-    <description>CRON custom messages grouped.</description>
- </rule>
-</group>
-
-<!-------------------------------------------------------->
-
-<!-- AUDLD -->
-
-<group name="sophos,">
- <rule id="101300" level="0" noalert="1">
-  <decoded_as>audld</decoded_as>
-    <description>AUDLD custom messages grouped.</description>
- </rule>
-</group>
-
-<!-------------------------------------------------------->
-
-<!-- AUISYS -->
-
-<group name="sophos,">
- <rule id="101400" level="0" noalert="1">
-  <decoded_as>auisys</decoded_as>
-    <description>AUISYS custom messages grouped.</description>
- </rule>
-</group>
-
-<!-------------------------------------------------------->
-
-<!-- CSSD -->
-
-<group name="sophos,">
- <rule id="101500" level="0" noalert="1">
-  <decoded_as>cssd</decoded_as>
-    <description>CSSD custom messages grouped.</description>
- </rule>
-</group>
-
-<!-------------------------------------------------------->
-
-<!-- POSTFIX -->
-
-<group name="sophos,">
- <rule id="101600" level="0" noalert="1">
-  <decoded_as>postfix</decoded_as>
-    <description>POSTFIX custom messages grouped.</description>
- </rule>
 </group>
