@@ -286,3 +286,33 @@
   <regex offset="after_parent">(\S+)[\d+]: (\.+)</regex>
   <order>url,action</order>
 </decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- UNIX_CHKPWD -->
+
+<decoder name="unix_chkpwd">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ unix_chkpwd[\d+]:/</prematch>
+</decoder>
+
+<decoder name="unix_chkpwd_1">
+  <parent>unix_chkpwd</parent>
+  <regex offset="after_parent">(\.+)</regex>
+  <order>url</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
+
+<!-- WPCORE -->
+
+<decoder name="wpcore">
+ <prematch>\d\d\d\d:\d\d:\d\d-\d\d:\d\d:\d\d \S+ wpcore[\d+]:/</prematch>
+</decoder>
+
+<decoder name="wpcore_child_1">
+  <parent>wpcore</parent>
+  <regex offset="after_parent">(\.+)</regex>
+  <order>url</order>
+</decoder>
+
+<!----------------------------------------------------------------------------------------------->
